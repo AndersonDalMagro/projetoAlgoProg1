@@ -1,9 +1,9 @@
 from langchain.tools import BaseTool
 from langchain.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-from langchain_community.chat_models import ChatMaritalk
-from my_models import MARITACA_SABIA
-from my_keys import MARITACA_API_KEY
+from langchain_google_genai import ChatGoogleGenerativeAI
+from my_models import GEMINI_FLASH
+from my_keys import GEMINI_API_KEY
 import ast
 
 class FerramentaExplicadora(BaseTool):
@@ -19,12 +19,15 @@ class FerramentaExplicadora(BaseTool):
   return_direct : bool = True
 
   def _run(self, acao):
-    acao = ast.literal_eval(acao)
-    tema_parametro = acao.get("tema", "")
+    try:
+      acao = ast.literal_eval(acao)
+      tema_parametro = acao.get("tema", "")
+    except (ValueError, SyntaxError, AttributeError):
+      tema_parametro = str(acao)
 
-    llm = ChatMaritalk(
-      api_key=MARITACA_API_KEY,
-      model=MARITACA_SABIA
+    llm = ChatGoogleGenerativeAI(
+      api_key=GEMINI_API_KEY,
+      model=GEMINI_FLASH
     )
 
     template_resposta = PromptTemplate(

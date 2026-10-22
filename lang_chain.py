@@ -1,12 +1,12 @@
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_community.chat_models import ChatMaritalk
 from langchain_core.messages import HumanMessage
-from my_models import GEMINI_FLASH, MARITACA_SABIA
-from my_keys import GEMINI_API_KEY, MARITACA_API_KEY
+from my_models import GEMINI_FLASH
+from my_keys import GEMINI_API_KEY
 from my_helper import encode_image
 from langchain.prompts import ChatPromptTemplate, PromptTemplate
 from langchain_core.output_parsers import StrOutputParser, JsonOutputParser
 from detalhes_imagem_modelo import DetalhesImagemModelo
+import os
 from langchain.globals import set_debug
 set_debug(False)
 
@@ -15,7 +15,7 @@ llm = ChatGoogleGenerativeAI(
   model=GEMINI_FLASH
 )
 
-imagem = encode_image("dados\exemplo_grafico.jpg")
+imagem = encode_image(os.path.join("dados", "exemplo_grafico.jpg"))
 
 template_analisador = ChatPromptTemplate.from_messages(
   [
